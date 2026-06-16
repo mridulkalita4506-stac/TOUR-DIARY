@@ -1,4 +1,4 @@
-const CACHE = 'tour-diary-v1';
+const CACHE = 'tour-diary-v2';
 const ASSETS = ['/', '/index.html', '/manifest.json'];
 
 self.addEventListener('install', e => {
