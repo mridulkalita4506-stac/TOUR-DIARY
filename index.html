@@ -10,7 +10,7 @@
 <meta name="description" content="Tour Diary - Journey & DA Tracker for Government Officers">
 <title>Tour Diary</title>
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icon.svg">
 <style>
 :root {
   --blue: #1565C0;
@@ -464,8 +464,8 @@ function saveSettings() {
     name: document.getElementById('set-name').value,
     designation: document.getElementById('set-designation').value,
     address: document.getElementById('set-address').value,
-    daRate: document.getElementById('set-da').value,
-    fareRate: document.getElementById('set-fare').value
+    daRate: parseFloat(document.getElementById('set-da').value) || 0,
+    fareRate: parseFloat(document.getElementById('set-fare').value) || 0
   };
   localStorage.setItem('tour_settings', JSON.stringify(settings));
   applySettingsToHeader();
@@ -512,6 +512,11 @@ function autoCalculate() {
   document.getElementById('fare').value = Math.round(distance * fareRate);
 
   // Auto DA Logic
+  if (distance <= 0) {
+    document.getElementById('da').value = 0;
+    return;
+  }
+
   const depDate = document.getElementById('dep-date').value;
   const depTime = document.getElementById('dep-time').value;
   const arrDate = document.getElementById('arr-date').value;
@@ -614,6 +619,7 @@ function renderRecords() {
         <span class="chip blue">₹${e.fare}</span>
         <span class="chip green">DA ₹${e.da}</span>
       </div>
+      ${e.purpose ? `<div class="entry-purpose">📝 ${e.purpose}</div>` : ''}
     </div>
   `).join('');
 }
@@ -672,6 +678,7 @@ async function shareText() {
 applySettingsToHeader();
 initDates();
 updateDynamicDropdowns();
+renderSummary();
 </script>
 
 <script>
